@@ -1,0 +1,8 @@
+env
+__pycache__
+# Build artifacts
+*.pyc
+# Temporary files
+*.swp
+static_root/*
+media_root/*
