@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.gis.geos import Point
-from mobalert.models import Accidents
+from mobalert.models import Accident
 # from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -18,7 +18,7 @@ def accident_info(request):
   
         location = Point(lng, lat, srid=4326)
 
-        danger_zone = Accidents.objects.filter(geom__contains=location)
+        danger_zone = Accident.objects.filter(geom__contains=location)
 
         if danger_zone:
             # create a list with the field's values of the resulted object
