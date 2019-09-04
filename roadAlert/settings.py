@@ -25,8 +25,19 @@ SECRET_KEY = '^%lfn08+=w^=80o6hfo^m9%t%s78hlq$^grsb5_e1xn2^!+qc*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Enter your allowed hosts here
+ALLOWED_HOSTS = ['localhost', '192.168.1.4', '192.168.1.6']
 
+# this disables Cross domain requests
+CORS_ORIGIN_ALLOW_ALL = False 
+
+# this allows cookie being passed cross domain    
+CORS_ALLOW_CREDENTIALS = True 
+
+# this is the list of allowed origins for cross domain ajax
+CORS_ORIGIN_WHITELIST = ( 
+        'http://localhost:8100',
+         )
 
 # Application definition
 
@@ -37,9 +48,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # GIS support
+    'django.contrib.gis',
+    # CORS
+    'corsheaders',
+    # mobalert app
+    'mobalert',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,8 +94,10 @@ WSGI_APPLICATION = 'roadAlert.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'roadalert_db',
+        'USER': 'roadalert',
+        'PASSWORD': 'roadalert',
     }
 }
 
@@ -118,3 +139,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
