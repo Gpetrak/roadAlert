@@ -1,4 +1,4 @@
-import Feature from 'ol/Feature';
+/*import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Polyline from 'ol/format/Polyline';
@@ -8,7 +8,7 @@ import BingMaps from 'ol/source/BingMaps';
 import VectorSource from 'ol/source/Vector';
 import {Circle as CircleStyle, Fill, Icon, Stroke, Style} from 'ol/style';
 import {getVectorContext} from 'ol/render';
-
+*/
 
 // This long string is placed here due to jsFiddle limitations.
 // It is usually loaded with AJAX.
@@ -54,7 +54,7 @@ var polyline = [
   '~@ym@yjA??a@cFd@kBrCgDbAUnAcBhAyAdk@et@??kF}D??OL'
 ].join('');
 
-var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new Polyline({
+var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline({
   factor: 1e6
 }).readGeometry(polyline, {
   dataProjection: 'EPSG:4326',
@@ -64,40 +64,40 @@ var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new P
 var routeCoords = route.getCoordinates();
 var routeLength = routeCoords.length;
 
-var routeFeature = new Feature({
+var routeFeature = new ol.Feature({
   type: 'route',
   geometry: route
 });
-var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */(new Feature({
+var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */(new ol.Feature({
   type: 'geoMarker',
-  geometry: new Point(routeCoords[0])
+  geometry: new ol.geom.Point(routeCoords[0])
 }));
-var startMarker = new Feature({
+var startMarker = new ol.Feature({
   type: 'icon',
-  geometry: new Point(routeCoords[0])
+  geometry: new ol.geom.Point(routeCoords[0])
 });
-var endMarker = new Feature({
+var endMarker = new ol.Feature({
   type: 'icon',
-  geometry: new Point(routeCoords[routeLength - 1])
+  geometry: new ol.geom.Point(routeCoords[routeLength - 1])
 });
 
 var styles = {
-  'route': new Style({
-    stroke: new Stroke({
+  'route': new ol.style.Style({
+    stroke: new ol.style.Stroke({
       width: 6, color: [237, 212, 0, 0.8]
     })
   }),
-  'icon': new Style({
-    image: new Icon({
+  'icon': new ol.style.Style({
+    image: new ol.style.Icon({
       anchor: [0.5, 1],
-      src: 'data/icon.png'
+      src: '../img/icon.png'
     })
   }),
-  'geoMarker': new Style({
-    image: new CircleStyle({
+  'geoMarker': new ol.style.Style({
+    image: new ol.style.Circle({
       radius: 7,
-      fill: new Fill({color: 'black'}),
-      stroke: new Stroke({
+      fill: new ol.style.Fill({color: 'black'}),
+      stroke: new ol.style.Stroke({
         color: 'white', width: 2
       })
     })
@@ -109,8 +109,8 @@ var speed, now;
 var speedInput = document.getElementById('speed');
 var startButton = document.getElementById('start-animation');
 
-var vectorLayer = new VectorLayer({
-  source: new VectorSource({
+var vectorLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
     features: [routeFeature, geoMarker, startMarker, endMarker]
   }),
   style: function(feature) {
@@ -123,27 +123,24 @@ var vectorLayer = new VectorLayer({
 });
 
 var center = [-5639523.95, -3501274.52];
-var map = new Map({
+var map = new ol.Map({
   target: document.getElementById('map'),
-  view: new View({
+  view: new ol.View({
     center: center,
     zoom: 10,
     minZoom: 2,
     maxZoom: 19
   }),
   layers: [
-    new TileLayer({
-      source: new BingMaps({
-        imagerySet: 'AerialWithLabelsOnDemand',
-        key: 'Your Bing Maps Key from http://www.bingmapsportal.com/ here'
-      })
+    new ol.layer.Tile({
+      source: new ol.source.OSM()
     }),
     vectorLayer
   ]
 });
 
 var moveFeature = function(event) {
-  var vectorContext = getVectorContext(event);
+  var vectorContext = ol.render.getVectorContext(event);
   var frameState = event.frameState;
 
   if (animating) {
@@ -157,8 +154,8 @@ var moveFeature = function(event) {
       return;
     }
 
-    var currentPoint = new Point(routeCoords[index]);
-    var feature = new Feature(currentPoint);
+    var currentPoint = new ol.geom.Point(routeCoords[index]);
+    var feature = new ol.Feature(currentPoint);
     vectorContext.drawFeature(feature, styles.geoMarker);
   }
   // tell OpenLayers to continue the postrender animation
