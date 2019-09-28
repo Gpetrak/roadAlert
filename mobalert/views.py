@@ -7,6 +7,12 @@ from mobalert.models import Accident
 # from django.views.decorators.csrf import csrf_exempt
 import json
 
+def home(request):
+    return render(request, 
+                  'mobalert/home.html',
+
+                 )
+
 def accident_info(request):
     if request.method == 'GET':
 
