@@ -13,6 +13,11 @@ def home(request):
 
                  )
 
+def track_loc(request):
+    return render(request,
+                  'mobalert/track_loc.html',
+                 )
+
 def accident_info(request):
     if request.method == 'GET':
 
