@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.gis.geos import Point
-from mobalert.models import Accident
+from mobalert.models import AccPointsBuffer
 # from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -29,26 +29,24 @@ def accident_info(request):
   
         location = Point(lng, lat, srid=4326)
 
-        danger_zone = Accident.objects.filter(geom__contains=location)
+        danger_zone = AccPointsBuffer.objects.filter(geom__contains=location)
 
         if danger_zone:
             # create a list with the field's values of the resulted object
             fields = []
             info = 'Alert'
-            cause = danger_zone.values_list('cause', flat=True).get()
-            str_addr = danger_zone.values_list('str_addr', flat=True).get()
-            accid_num = int(danger_zone.values_list('accid_num', flat=True).get())
+            cause = danger_zone.values_list('title', flat=True).get()
+            # str_addr = danger_zone.values_list('str_addr', flat=True).get()
+            # accid_num = int(danger_zone.values_list('accid_num', flat=True).get())
 
-            fields.extend([info, cause, str_addr, accid_num])
+            fields.extend([info, cause])
             result = json.dumps(fields)
             # result = "Attention: Danger Zone %s" % danger_zone
         else:
             fields = []
             info = "You are safe"
             cause = ""
-            str_addr = ""
-            accid_num = 0
-            fields.extend([info, cause, str_addr, accid_num])
+            fields.extend([info, cause])
             result = json.dumps(fields)
         return HttpResponse(result,
                             content_type = 'application/json')

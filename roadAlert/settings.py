@@ -26,7 +26,7 @@ SECRET_KEY = '^%lfn08+=w^=80o6hfo^m9%t%s78hlq$^grsb5_e1xn2^!+qc*'
 DEBUG = True
 
 # Enter your allowed hosts here
-ALLOWED_HOSTS = ['localhost', '192.168.1.4', '192.168.1.6']
+ALLOWED_HOSTS = ['*']
 
 # this disables Cross domain requests
 CORS_ORIGIN_ALLOW_ALL = False 
