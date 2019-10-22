@@ -2,7 +2,7 @@ import psycopg2
 import config # config file with the database info
 from mobalert.models import AccPointsBuffer
 
-def buffer(point):
+def buffer(lat, lon, dist):
     dbname = config.DATABASE_CONFIG['dbname']
     user = config.DATABASE_CONFIG['user']
     host = config.DATABASE_CONFIG['host']
@@ -19,9 +19,9 @@ def buffer(point):
         print 'I am unable to connect the database: " + ex'
 
     curs = conn.cursor()
-    curs.execute("SELECT ST_Buffer(ST_GeomFromText('POINT(-71.104 42.315)', 4326)::geography, 500);")
+    curs.execute("SELECT ST_Buffer(ST_GeomFromText('POINT(%s %s)', 4326)::geography, %s);" % (lat, lon, dist))
 
     res = curs.fetchone()
     # curs.execute(("SELECT ST_Value(crete_elev.rast, 1, ST_SetSRID(ST_Point(%s),4326)) FROM crete_elev" % point))
-    #conn.close()
+    conn.close()
     return res
