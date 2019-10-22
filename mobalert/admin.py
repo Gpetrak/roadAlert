@@ -1,4 +1,4 @@
 from django.contrib.gis import admin
-from mobalert.models import AccPointsBuffer
+from mobalert.models import Event
 
-admin.site.register(AccPointsBuffer)
+admin.site.register(Event, admin.OSMGeoAdmin)

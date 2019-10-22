@@ -1,8 +1,30 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.contrib.gis.db import models
+from django.forms import ModelForm
+from django.forms import Textarea
+from datetime import datetime
 
+class Event(models.Model):
+    description = models.TextField(max_length=200)
+    distance = models.TextField(max_length=200)
+    location = models.PointField()
+    image = models.ImageField('img', upload_to='images/')
+    date = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return self.description
+
+    def __unicode__(self):
+        return self.description or u''
+
+# Build the Textarea
+#class EventModelForm(ModelForm):
+#    class Meta:
+#        model = Event
+#        widgets = {
+#                'abstract': Textarea(attrs={'cols': 80, 'rows': 20}),
+#                }
 
 class AccPointsBuffer(models.Model):
     gid = models.AutoField(primary_key=True)
@@ -21,24 +43,5 @@ class AccPointsBuffer(models.Model):
     def __unicode__(self):
         return self.title or u''
 
-'''
-class Accident(models.Model):
-    gid = models.AutoField(primary_key=True)
-    id = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
-    cause = models.CharField(max_length=80, blank=True, null=True)
-    str_addr = models.CharField(max_length=18, blank=True, null=True)
-    accid_num = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
-    geom = models.MultiPolygonField(blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'accident'
-
-    def __str__(self):
-        return self.cause
-
-    def __unicode__(self):
-        return self.cause or u''
-'''
 
 
