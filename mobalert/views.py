@@ -17,7 +17,7 @@ def track_loc(request):
     return render(request,
                   'mobalert/track_loc.html',
                  )
-
+                 
 def accident_info(request):
     '''
     It gets user location and checks if she/he is in a dangerous area or not. 
@@ -64,7 +64,6 @@ def accident_info(request):
             result = json.dumps(fields)
         return HttpResponse(result,
                             content_type = 'application/json')
-
 
 @csrf_exempt 
 def datastore(request):
