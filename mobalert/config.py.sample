@@ -1,0 +1,6 @@
+DATABASE_CONFIG = {
+    'host': 'localhost',
+    'dbname': '<db_name>',
+    'user': '<user>',
+    'password': '<password>',
+}

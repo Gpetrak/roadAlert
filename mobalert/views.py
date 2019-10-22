@@ -6,6 +6,7 @@ from django.contrib.gis.geos import Point
 from mobalert.models import AccPointsBuffer, Event
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
+from .utils import buffer
 import json
 
 def home(request):
@@ -102,11 +103,13 @@ def datastore(request):
                        location = location,
                       )
 
-
         e1.save()
+ 
+        # Call buffer function from utils in order to save a new buffer point in the db
+        poly = buffer(location)
      
         # check if e1 saved
         if e1.pk is None:
             return HttpResponse("Upload failed")
         else:
-            return HttpResponse("Success")
+            return HttpResponse(poly)
