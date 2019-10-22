@@ -6,6 +6,7 @@ from django.contrib.gis.geos import Point
 from mobalert.models import AccPointsBuffer
 # from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core import serializers
 
 def home(request):
     return render(request, 
@@ -35,13 +36,23 @@ def accident_info(request):
             # create a list with the field's values of the resulted object
             fields = []
             info = 'Alert'
-            cause = danger_zone.values_list('title', flat=True).get()
-            # str_addr = danger_zone.values_list('str_addr', flat=True).get()
-            # accid_num = int(danger_zone.values_list('accid_num', flat=True).get())
 
-            fields.extend([info, cause])
+            # serializing many results in a json object
+            #cause = serializers.serialize ('json',
+            #                                danger_zone,
+            #                                fields=('title')
+            #                              )
+            # I use filter() instead of get() because it is possible to more than one object for one location
+            cause = danger_zone.values_list('title', flat=True).filter()
+  
+            # First I add the info value to the fields list
+            fields.append(info)
+            # After that I add all the values from title field that django detected
+            for i in cause:
+                fields.append(i)    
+            
             result = json.dumps(fields)
-            # result = "Attention: Danger Zone %s" % danger_zone
+            
         else:
             fields = []
             info = "You are safe"
