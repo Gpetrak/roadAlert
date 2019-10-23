@@ -106,12 +106,17 @@ def datastore(request):
         e1.save()
  
         # Call buffer function from utils in order to save a new buffer point in the db
-        poly = buffer(latitude, longitude, distance)
+        poly = buffer(longitude, latitude, distance)
+
+        buf1 = AccPointsBuffer(title = description, # title is the description in the shp
+                               distance = distance,
+                               geom = poly,
+                               )
         
-        # buf1 = AccPointsBuffer() 
+        buf1.save() 
      
         # check if e1 saved
-        if e1.pk is None:
+        if (e1.pk and buf1) is None:
             return HttpResponse("Upload failed")
         else:
             return HttpResponse("success")

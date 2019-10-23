@@ -31,7 +31,7 @@ class AccPointsBuffer(models.Model):
     id = models.FloatField(blank=True, null=True)
     title = models.CharField(max_length=80, blank=True, null=True)
     distance = models.BigIntegerField(blank=True, null=True)
-    geom = models.MultiPolygonField(blank=True, null=True)
+    geom = models.MultiPolygonField(geography=True, blank=True, null=True)
 
     class Meta:
         managed = False
