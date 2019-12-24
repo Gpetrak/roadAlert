@@ -7,7 +7,7 @@ from mobalert.models import AccPointsBuffer, Event
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from .utils import buffer
-import json
+import simplejson as json
 
 def home(request):
     return render(request, 
