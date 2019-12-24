@@ -48,19 +48,20 @@ def accident_info(request):
             #                              )
             # I use filter() instead of get() because it is possible to more than one object for one location
             cause = danger_zone.values_list('title', flat=True).filter()
+            dist = danger_zone.values_list('distance', flat=True).filter()
   
             # First I add the info value to the fields list
             fields.append(info)
-            # After that I add all the values from title field that django detected
-            for i in cause:
-                fields.append(i)    
+            # After that I add all the values from title and distance field that django detected
+            for i in range(len(cause)):
+                fields.extend([cause[i],dist[i]])    
             
             result = json.dumps(fields)
             
         else:
             fields = []
             info = "You are safe"
-            cause = ""
+            cause = "hello world"
             fields.extend([info, cause])
             result = json.dumps(fields)
         return HttpResponse(result,
